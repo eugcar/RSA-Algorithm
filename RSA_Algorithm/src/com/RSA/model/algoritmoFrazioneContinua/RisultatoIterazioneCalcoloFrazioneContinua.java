@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.RSA.model.calcolaFrazioneContinua;
+package com.RSA.model.algoritmoFrazioneContinua;
 
 import java.math.BigInteger;
 
