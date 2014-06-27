@@ -3,12 +3,12 @@
  */
 package com.RSA.model.algoritmoAttaccoEsponenteBassiWiener;
 
-import java.math.BigDecimal;
 import java.math.BigInteger;
 
 /**
+ * Questa interfaccia contiene l'algoritmo per l'attacco all'algoritmo RSA, quando vengono scelti esponenti di cifratura bassi. - Design Pattern Strategy
+ * 
  * @author Eugenio
- *
  */
 public interface IAlgoritmoAttaccoEsponenteBassoWienerStrategy {
 	/**

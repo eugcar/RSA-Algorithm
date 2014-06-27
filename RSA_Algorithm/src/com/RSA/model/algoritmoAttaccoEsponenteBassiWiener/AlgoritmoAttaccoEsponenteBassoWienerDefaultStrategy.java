@@ -9,16 +9,19 @@ import java.util.Iterator;
 import java.util.List;
 
 import com.RSA.model.Frazione;
+import com.RSA.model.Utility;
 import com.RSA.model.algoritmoFrazioneContinua.AlgoritmoFrazioneContinuaDefaultStrategy;
 import com.RSA.model.algoritmoFrazioneContinua.IAlgoritmoFrazioneContinuaStrategy;
 import com.RSA.model.algoritmoFrazioneContinua.RisultatoIterazioneCalcoloFrazioneContinua;
 
 /**
+ * Questa classe rappresenta l'implementazione di default per l'attacco dell'algoritmo RSA, quando vengono
+ * scelti degli esponenenti di cifratura / decifratura bassi. - Design Pattern Strategy
+ * 
  * @author Eugenio
- *
  */
 public class AlgoritmoAttaccoEsponenteBassoWienerDefaultStrategy implements IAlgoritmoAttaccoEsponenteBassoWienerStrategy {
-
+	
 	/* (non-Javadoc)
 	 * @see com.RSA.model.algoritmoAttaccoEsponenteBassiWiener.IAlgoritmoAttaccoEsponenteBassoWienerStrategy#calcolaFattori_n(java.math.BigInteger, java.math.BigInteger)
 	 */
@@ -41,11 +44,11 @@ public class AlgoritmoAttaccoEsponenteBassoWienerDefaultStrategy implements IAlg
 			A = risultatoIterazioneCalcoloFrazioneContinua.get_frazione().get_numeratore();   // A = k
 			B = risultatoIterazioneCalcoloFrazioneContinua.get_frazione().get_denominatore(); // B = d
 			// Controllo che B = d, sia dispari			
-			if(B.remainder(new BigInteger("2")).compareTo(BigInteger.ZERO) != 0) {				
+			if(!Utility.isPari(B)) {				
 				// Calcolo C
 				e_B_meno_1 = e.multiply(B).subtract(BigInteger.ONE);
-				// Controllo che C sia un intero
-				if (e_B_meno_1.remainder(A).compareTo(BigInteger.ZERO) == 0) {
+				// Controllo che C sia un intero. Ovvero che e*B - 1 / A abbia resto nullo.
+				if (Utility.A_divide_B(e_B_meno_1, A)) {
 					C = e_B_meno_1.divide(A);
 					// Calcolo radici del polinomio:  x^2 - x*(n - fi_n + 1) + n
 					Zero_order = n;
@@ -93,7 +96,7 @@ public class AlgoritmoAttaccoEsponenteBassoWienerDefaultStrategy implements IAlg
 			double r1 = (b + discriminante) / 2;
 			double r2 = (b - discriminante) / 2;
 			// Controllo che le variabili siano intere
-			if (((r1 == Math.floor(r1)) && !Double.isInfinite(r1)) && ((r2 == Math.floor(r2)) && !Double.isInfinite(r2))) {
+			if (Utility.isIntero(r1) && Utility.isIntero(r2)) {
 				// Inizializzo l'array
 				radiciPolinomio = new BigInteger[2];
 				// Aggiungo le radici all'array

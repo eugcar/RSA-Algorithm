@@ -14,18 +14,11 @@ import com.RSA.model.algoritmoEuclideo.IAlgoritmoEuclideoStrategy;
 import com.RSA.model.algoritmoEuclideo.RisultatoIterazioneAlgoritmoEuclideo;
 
 /**
+ * Questa classe rappresenta una implementazione di default per il calcolo delle frazioni continue. - Design Pattern Strategy
+ * 
  * @author Eugenio
- *
  */
 public class AlgoritmoFrazioneContinuaDefaultStrategy implements IAlgoritmoFrazioneContinuaStrategy {
-
-	/* (non-Javadoc)
-	 * @see com.RSA.model.ICalcolaFrazioneContinuaStrategy#calcolaFrazioneContinua(double)
-	 */
-	public List<RisultatoIterazioneCalcoloFrazioneContinua> calcolaFrazioneContinua(double d) {
-		// TODO Auto-generated method stub
-		return null;
-	}
 
 	/* (non-Javadoc)
 	 * @see com.RSA.model.ICalcolaFrazioneContinuaStrategy#calcolaFrazioneContinua(java.math.BigInteger, java.math.BigInteger)

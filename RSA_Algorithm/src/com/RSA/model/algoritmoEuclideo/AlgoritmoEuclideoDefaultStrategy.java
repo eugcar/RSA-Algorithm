@@ -9,7 +9,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 /**
- * Questo classe rappresenta l'implementazione di default dell'algoritmo euclideo per il calcolo del MCD tra due numeri interi.
+ * Questo classe rappresenta l'implementazione di default dell'algoritmo euclideo per il calcolo del MCD tra due numeri interi. - Design Pattern Strategy
  * 
  * @author Eugenio
  */

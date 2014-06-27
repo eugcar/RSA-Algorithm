@@ -5,13 +5,8 @@ package com.RSA.main;
 
 import java.math.BigInteger;
 
-import com.RSA.model.Frazione;
-import com.RSA.model.algoritmoAttaccoEsponenteBassiWiener.AlgoritmoAttaccoEsponenteBassoWienerDefaultStrategy;
-import com.RSA.model.algoritmoAttaccoEsponenteBassiWiener.IAlgoritmoAttaccoEsponenteBassoWienerStrategy;
-import com.RSA.model.algoritmoEuclideo.AlgoritmoEuclideoDefaultStrategy;
-import com.RSA.model.algoritmoEuclideo.IAlgoritmoEuclideoStrategy;
-import com.RSA.model.algoritmoFrazioneContinua.AlgoritmoFrazioneContinuaDefaultStrategy;
-import com.RSA.model.algoritmoFrazioneContinua.IAlgoritmoFrazioneContinuaStrategy;
+import com.RSA.model.algoritmoTestPrimalita.AlgoritmoTestPrimalitaMillerRabinStrategy;
+import com.RSA.model.algoritmoTestPrimalita.IAlgoritmoTestPrimalitaStrategy;
 
 /**
  * @author Eugenio
@@ -32,9 +27,17 @@ public class Main {
 //		IAlgoritmoEuclideoStrategy algoritmoEuclideo = new AlgoritmoEuclideoDefaultStrategy();
 //		algoritmoEuclideo.calcolaMCD(new BigInteger("11111"), new BigInteger("12345"));
 		
-		IAlgoritmoAttaccoEsponenteBassoWienerStrategy algoritmoWiener = new AlgoritmoAttaccoEsponenteBassoWienerDefaultStrategy();
-		algoritmoWiener.calcolaFattori_n(new BigInteger("3235119"), new BigInteger("1966981193543797"));
-
+//		IAlgoritmoAttaccoEsponenteBassoWienerStrategy algoritmoWiener = new AlgoritmoAttaccoEsponenteBassoWienerDefaultStrategy();
+//		algoritmoWiener.calcolaFattori_n(new BigInteger("323815174542919"), new BigInteger("1966981193543797"));
+		
+		IAlgoritmoTestPrimalitaStrategy algoritmoTestPrimalita = new AlgoritmoTestPrimalitaMillerRabinStrategy();
+		boolean esito=algoritmoTestPrimalita.testaPrimalitaIntero(new BigInteger("941085251"), 10);
+		// Controllo l'esito della prova.
+		if (esito == true) {
+			System.out.println("PRIMO");
+		} else {
+			System.out.println("NON PRIMO");
+		}
 	}
 
 }

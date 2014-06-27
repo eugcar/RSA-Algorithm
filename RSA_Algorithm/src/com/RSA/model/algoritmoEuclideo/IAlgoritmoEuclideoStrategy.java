@@ -7,8 +7,9 @@ import java.math.BigInteger;
 import java.util.List;
 
 /**
+ * Questa interfaccia contiene il metodo per il calcolo dell'MCD tra due numeri interi. - Design Pattern Strategy
+ * 
  * @author Eugenio
- *
  */
 public interface IAlgoritmoEuclideoStrategy {
 	/**

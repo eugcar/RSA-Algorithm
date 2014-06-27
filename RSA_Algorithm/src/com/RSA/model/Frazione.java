@@ -6,8 +6,9 @@ package com.RSA.model;
 import java.math.BigInteger;
 
 /**
+ * Questa classe rappresenta una frazione.
+ * 
  * @author Eugenio
- *
  */
 public class Frazione {
 	
