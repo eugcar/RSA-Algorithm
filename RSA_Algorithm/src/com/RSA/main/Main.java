@@ -5,6 +5,8 @@ package com.RSA.main;
 
 import java.math.BigInteger;
 
+import com.RSA.model.algoritmoRSA.Client;
+import com.RSA.model.algoritmoRSA.GeneratoreChiavi;
 import com.RSA.model.algoritmoTestPrimalita.AlgoritmoTestPrimalitaMillerRabinStrategy;
 import com.RSA.model.algoritmoTestPrimalita.IAlgoritmoTestPrimalitaStrategy;
 
@@ -29,15 +31,25 @@ public class Main {
 		
 //		IAlgoritmoAttaccoEsponenteBassoWienerStrategy algoritmoWiener = new AlgoritmoAttaccoEsponenteBassoWienerDefaultStrategy();
 //		algoritmoWiener.calcolaFattori_n(new BigInteger("323815174542919"), new BigInteger("1966981193543797"));
+//		
+//		IAlgoritmoTestPrimalitaStrategy algoritmoTestPrimalita = new AlgoritmoTestPrimalitaMillerRabinStrategy();
+//		boolean esito=algoritmoTestPrimalita.testaPrimalitaIntero(new BigInteger("10000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000903"), 10000);
+//		// Controllo l'esito della prova.
+//		if (esito == true) {
+//			System.out.println("PRIMO");
+//		} else {
+//			System.out.println("NON PRIMO");
+//		}
+		GeneratoreChiavi.generaChiavi();
 		
-		IAlgoritmoTestPrimalitaStrategy algoritmoTestPrimalita = new AlgoritmoTestPrimalitaMillerRabinStrategy();
-		boolean esito=algoritmoTestPrimalita.testaPrimalitaIntero(new BigInteger("941085251"), 10);
-		// Controllo l'esito della prova.
-		if (esito == true) {
-			System.out.println("PRIMO");
-		} else {
-			System.out.println("NON PRIMO");
-		}
+//		Client client = new Client();
+//		
+//		BigInteger integer = client.toBigInteger("Oh mio dio ma è bellissimo!_:;,.");
+//		System.out.println(integer.toString());
+//		
+//		String string = client.fromBigInteger(integer);
+//		System.out.println(string);
+		
+		
 	}
-
 }

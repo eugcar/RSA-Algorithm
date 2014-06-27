@@ -13,6 +13,8 @@ import com.RSA.model.Utility;
 import com.RSA.model.algoritmoFrazioneContinua.AlgoritmoFrazioneContinuaDefaultStrategy;
 import com.RSA.model.algoritmoFrazioneContinua.IAlgoritmoFrazioneContinuaStrategy;
 import com.RSA.model.algoritmoFrazioneContinua.RisultatoIterazioneCalcoloFrazioneContinua;
+import com.RSA.model.algoritmoRSA.PrivateKey;
+import com.RSA.model.algoritmoRSA.PublicKey;
 
 /**
  * Questa classe rappresenta l'implementazione di default per l'attacco dell'algoritmo RSA, quando vengono
@@ -25,13 +27,15 @@ public class AlgoritmoAttaccoEsponenteBassoWienerDefaultStrategy implements IAlg
 	/* (non-Javadoc)
 	 * @see com.RSA.model.algoritmoAttaccoEsponenteBassiWiener.IAlgoritmoAttaccoEsponenteBassoWienerStrategy#calcolaFattori_n(java.math.BigInteger, java.math.BigInteger)
 	 */
-	public BigInteger[] calcolaFattori_n(BigInteger e, BigInteger n) {
+	public PrivateKey calcolaPrivateKeyClient(PublicKey publicKeyClient) {
 		
 		// Variabili
 		BigInteger A, B, C, e_B_meno_1, Zero_order, FirstOrder, P, Q;
-		BigInteger[] fattori_n = null;
 		BigInteger[] fattori_polinomio = null;
-		
+		PrivateKey privateKeyClient = null;
+		// Prendo e, n dalla chiave pubblica
+		BigInteger e = publicKeyClient.get_e();
+		BigInteger n = publicKeyClient.get_n();
 		// Prendo la lista delle frazioni continue di e/n
 		Frazione frazione = new Frazione(e, n);
 		IAlgoritmoFrazioneContinuaStrategy algoritmoFrazioniContinue = new AlgoritmoFrazioneContinuaDefaultStrategy();
@@ -62,7 +66,7 @@ public class AlgoritmoAttaccoEsponenteBassoWienerDefaultStrategy implements IAlg
 						Q = fattori_polinomio[1];
 						// Controllo se ho fattorizzato n correttamente, ovvero se P*Q = n
 						if (P.multiply(Q).compareTo(n) == 0) {
-							fattori_n = fattori_polinomio;
+							privateKeyClient = new PrivateKey(P, Q, B);
 							System.out.println("P: " + P);
 							System.out.println("Q: " + Q);
 							System.out.println("n=P*Q=" + P.multiply(Q).toString());
@@ -71,7 +75,7 @@ public class AlgoritmoAttaccoEsponenteBassoWienerDefaultStrategy implements IAlg
 				}
 			}
 		}
-		return fattori_n;
+		return privateKeyClient;
 	}
 	/**
 	 * Metodo per ottenere le radici di un polinomio di secondo grado nella forma a*x^2 + b*x + c = 0.
