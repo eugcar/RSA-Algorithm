@@ -3,7 +3,8 @@
  */
 package com.RSA.model.algoritmoRSA;
 
-import java.math.BigInteger;
+import java.util.LinkedList;
+import java.util.List;
 
 /**
  * @author Eugenio
@@ -23,43 +24,54 @@ public class Client {
 	 * Chiave pubblica del client.
 	 */
 	private PublicKey _publicKey;
-	
 	/**
-	 * Costruttore.
-	 * 
-	 * @param _id Id univoco del client.
-	 * @param _privateKey Chiave privata del client.
-	 * @param _publicKey Chiave pubblica del client.
+	 * Macchina RSA utilizzata dal Client.
 	 */
-	public Client(int _id, PrivateKey _privateKey, PublicKey _publicKey) {
-		this._id = _id;
-		this._privateKey = _privateKey;
-		this._publicKey = _publicKey;
-	}
+	private MacchinaRSA _macchinaRSA;
+	/**
+	 * Lista dei messaggi cifrati ricevuti.
+	 */
+	private List<MessaggioCifrato> _messaggiRicevuti;
+
 	/**
 	 * Costruttore
 	 */
-	public Client() {}
-
-	/**
-	 * Metodo per convertire una stringa in un BigInteger.
-	 * 
-	 * @param stringToConvert Stringa da convertire.
-	 * @return BigInteger rappresentate la stringa.
-	 */
-	public BigInteger toBigInteger(String stringToConvert)
-	{
-	    return new BigInteger(stringToConvert.getBytes());
+	public Client() {
+		// Genero la chiave del client
+		GeneratoreChiavi.generaChiavi(this);
+		this._macchinaRSA = new MacchinaRSA();
+		this._messaggiRicevuti = new LinkedList<MessaggioCifrato>();
 	}
 	/**
-	 * Metodo per convertire un BigInter in una stringa.
+	 * Metodo per inviare un messaggio cifrato ad un client.
 	 * 
-	 * @param integer Intero da convertire in una stringa.
-	 * @return Stringa rappresentante l'intero.
+	 * @param messaggio Messaggio in chiaro da inviare ad un client.
 	 */
-	public String fromBigInteger(BigInteger integer)
-	{
-	    return new String(integer.toByteArray());
+	public void inviaMessaggioToClient(MessaggioChiaro messaggioChiaro) {
+		// Si ottiene il messaggio cifrato attraverso la macchinaRSA.
+		MessaggioCifrato messaggioCifrato = _macchinaRSA.fromMessaggioChiaroToMessaggioCifrato(messaggioChiaro);
+		// Si aggiunge l'intero cifrato alla lista dei messaggi ricevuti dell'altro client.
+		messaggioChiaro.get_destinatario().get_messaggiRicevuti().add(messaggioCifrato);
+	}
+	/**
+	 * Metodo per ottenere l'ultimo messaggio ricevuto, decifrato per averlo in chiaro.
+	 * 
+	 * @return Messaggio in chiaro, se il client ha almeno un messaggio nella sua lista. Null altrimenti.
+	 */
+	public MessaggioChiaro getUltimoMessaggioRicevutoInChiaro() {
+		// Messaggio da restituire.
+		MessaggioChiaro messaggioChiaro = null;
+		// Lunghezza lista di messaggi
+		int indexLastMessage = this._messaggiRicevuti.size() - 1;
+		// Controllo che ci sia almeno un messaggio nella lista.
+		if (indexLastMessage >= 0) {
+			// Rimuovo dalla lista dei messaggi l'ultimo messaggio ricevuto.
+			MessaggioCifrato messaggioCifrato = this._messaggiRicevuti.remove(indexLastMessage);
+			// Ricavo il messaggio in chiaro dal messaggio cifrato.
+			messaggioChiaro = this._macchinaRSA.fromMessaggioCifratoToMessaggioChiaro(messaggioCifrato);
+		}
+		
+		return messaggioChiaro;
 	}
 	
 	/**
@@ -86,11 +98,41 @@ public class Client {
 	public void set_privateKey(PrivateKey _privateKey) {
 		this._privateKey = _privateKey;
 	}
+	/**
+	 * @return the _publicKey
+	 */
 	public PublicKey get_publicKey() {
 		return _publicKey;
 	}
+	/**
+	 * @param _publicKey the _publicKey to set
+	 */
 	public void set_publicKey(PublicKey _publicKey) {
 		this._publicKey = _publicKey;
+	}
+	/**
+	 * @return the _macchinaRSA
+	 */
+	public MacchinaRSA get_macchinaRSA() {
+		return _macchinaRSA;
+	}
+	/**
+	 * @param _macchinaRSA the _macchinaRSA to set
+	 */
+	public void set_macchinaRSA(MacchinaRSA _macchinaRSA) {
+		this._macchinaRSA = _macchinaRSA;
+	}
+	/**
+	 * @return the _messaggiRicevuti
+	 */
+	public List<MessaggioCifrato> get_messaggiRicevuti() {
+		return _messaggiRicevuti;
+	}
+	/**
+	 * @param _messaggiRicevuti the _messaggiRicevuti to set
+	 */
+	public void set_messaggiRicevuti(List<MessaggioCifrato> _messaggiRicevuti) {
+		this._messaggiRicevuti = _messaggiRicevuti;
 	}
 	
 }
