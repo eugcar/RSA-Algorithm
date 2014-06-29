@@ -67,9 +67,9 @@ public class AlgoritmoAttaccoEsponenteBassoWienerDefaultStrategy implements IAlg
 						// Controllo se ho fattorizzato n correttamente, ovvero se P*Q = n
 						if (P.multiply(Q).compareTo(n) == 0) {
 							privateKeyClient = new PrivateKey(P, Q, B);
-							System.out.println("P: " + P);
-							System.out.println("Q: " + Q);
-							System.out.println("n=P*Q=" + P.multiply(Q).toString());
+//							System.out.println("P: " + P);
+//							System.out.println("Q: " + Q);
+//							System.out.println("n=P*Q=" + P.multiply(Q).toString());
 						}
 					}
 				}

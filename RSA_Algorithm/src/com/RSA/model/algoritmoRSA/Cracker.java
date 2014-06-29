@@ -19,12 +19,11 @@ public class Cracker {
 	 * @return Chiave privata se esito positivo. Null altrimenti.
 	 */
 	public PrivateKey ottieniChiavePrivataDaChiavePubblica(PublicKey publicKey) {
-		
-		PrivateKey privateKeyClient = null;
+
 		// Scelgo l'algoritmo di attacco.
 		IAlgoritmoAttaccoEsponenteBassoWienerStrategy algoritmoAttaccoEsponenteBassoWienerStrategy = new AlgoritmoAttaccoEsponenteBassoWienerDefaultStrategy();
 		// Provo ad ottenere la chiave
-		privateKeyClient = algoritmoAttaccoEsponenteBassoWienerStrategy.calcolaPrivateKeyClient(publicKey);
+		PrivateKey privateKeyClient = algoritmoAttaccoEsponenteBassoWienerStrategy.calcolaPrivateKeyClient(publicKey);
 		
 		return privateKeyClient;
 	}

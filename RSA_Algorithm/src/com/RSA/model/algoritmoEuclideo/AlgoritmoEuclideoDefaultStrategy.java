@@ -67,15 +67,14 @@ public class AlgoritmoEuclideoDefaultStrategy implements IAlgoritmoEuclideoStrat
 		}
 		
 //		TESTING RISULTATI
-//		
-		System.out.println("\n \n \n");
-		System.out.println("ALGORITMO EUCLIDEO: \n");
-		for (Iterator<RisultatoIterazioneAlgoritmoEuclideo> iterator = listaRisultati.iterator(); iterator.hasNext();) {
-			RisultatoIterazioneAlgoritmoEuclideo risultatoIterazioneAlgoritmoEuclideo = (RisultatoIterazioneAlgoritmoEuclideo) iterator.next();
-			
-			System.out.println(risultatoIterazioneAlgoritmoEuclideo.toString());
-			
-		}
+		
+//		System.out.println("\n \n \n");
+//		System.out.println("ALGORITMO EUCLIDEO: \n");
+//		for (Iterator<RisultatoIterazioneAlgoritmoEuclideo> iterator = listaRisultati.iterator(); iterator.hasNext();) {
+//			RisultatoIterazioneAlgoritmoEuclideo risultatoIterazioneAlgoritmoEuclideo = (RisultatoIterazioneAlgoritmoEuclideo) iterator.next();	
+//			System.out.println(risultatoIterazioneAlgoritmoEuclideo.toString());
+//			
+//		}
 		
 		return listaRisultati;
 	}

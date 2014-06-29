@@ -13,9 +13,9 @@ import java.util.List;
 public class Client {
 
 	/**
-	 * Id univoco per questo client.
+	 * Nome univoco nel dominio dei client.
 	 */
-	private int _id;
+	private String _nomeClient;
 	/**
 	 * Chiave private del client.
 	 */
@@ -35,12 +35,19 @@ public class Client {
 
 	/**
 	 * Costruttore
+	 * 
+	 * @param nomeClient Nome del client.
 	 */
-	public Client() {
+	public Client(String nomeClient, Boolean sicuro) {
 		// Genero la chiave del client
-		GeneratoreChiavi.generaChiavi(this);
+		GeneratoreChiavi.generaChiavi(this, sicuro);
+		// Inizializzo tutti gli attributi
+		this._nomeClient = nomeClient;
 		this._macchinaRSA = new MacchinaRSA();
 		this._messaggiRicevuti = new LinkedList<MessaggioCifrato>();
+		// Aggiungo la chiave all'archivio
+		ArchivioChiaviPubbliche.getInstance().aggiungiClient(this._nomeClient, this._publicKey);
+		
 	}
 	/**
 	 * Metodo per inviare un messaggio cifrato ad un client.
@@ -54,11 +61,11 @@ public class Client {
 		messaggioChiaro.get_destinatario().get_messaggiRicevuti().add(messaggioCifrato);
 	}
 	/**
-	 * Metodo per ottenere l'ultimo messaggio ricevuto, decifrato per averlo in chiaro.
+	 * Metodo per ottenere e rimuovere l'ultimo messaggio ricevuto, decifrato per averlo in chiaro.
 	 * 
 	 * @return Messaggio in chiaro, se il client ha almeno un messaggio nella sua lista. Null altrimenti.
 	 */
-	public MessaggioChiaro getUltimoMessaggioRicevutoInChiaro() {
+	public MessaggioChiaro getAndRemoveUltimoMessaggioRicevutoInChiaro() {
 		// Messaggio da restituire.
 		MessaggioChiaro messaggioChiaro = null;
 		// Lunghezza lista di messaggi
@@ -73,18 +80,37 @@ public class Client {
 		
 		return messaggioChiaro;
 	}
+	/**
+	 * Metodo per ottenere l'utlimo messaggio ricevuto, cifrato.
+	 * 
+	 * @return Messaggio cifrato, se il client ha almeno un messaggio nella sua lista. Null altrimenti.
+	 */
+	public MessaggioCifrato getUltimoMessaggioRicevutoCifrato() {
+		// Messaggio da restituire.
+		MessaggioCifrato messaggioCifrato = null;
+		// Lunghezza lista di messaggi
+		int indexLastMessage = this._messaggiRicevuti.size() - 1;
+		// Controllo che ci sia almeno un messaggio nella lista.
+		if (indexLastMessage >= 0) {
+			// Rimuovo dalla lista dei messaggi l'ultimo messaggio ricevuto.
+			messaggioCifrato = this._messaggiRicevuti.get(indexLastMessage);
+		}
+		
+		return messaggioCifrato;
+	}
+	
 	
 	/**
-	 * @return the _id
+	 * @return the _nomeClient
 	 */
-	public int get_id() {
-		return _id;
+	public String get_nomeClient() {
+		return _nomeClient;
 	}
 	/**
-	 * @param _id the _id to set
+	 * @param _nomeClient the _nomeClient to set
 	 */
-	public void set_id(int _id) {
-		this._id = _id;
+	public void set_nomeClient(String _nomeClient) {
+		this._nomeClient = _nomeClient;
 	}
 	/**
 	 * @return the _privateKey

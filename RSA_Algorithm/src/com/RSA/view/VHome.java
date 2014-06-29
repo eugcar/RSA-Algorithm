@@ -16,6 +16,11 @@ import javax.swing.JScrollPane;
 import javax.swing.border.EmptyBorder;
 
 import com.RSA.model.algoritmoRSA.Client;
+import com.RSA.model.algoritmoRSA.Cracker;
+import com.RSA.view.listener.InizializzaClientListener;
+import com.RSA.view.listener.InviaMessaggioListener;
+import com.RSA.view.listener.LeggiUltimoMessaggioListener;
+import com.RSA.view.listener.OttieniChiaveClientListener;
 
 /**
  * @author Home
@@ -27,15 +32,18 @@ public class VHome extends JFrame {
 	 * Seriale del frame.
 	 */
 	private static final long serialVersionUID = 1L;
-
 	/**
 	 * Client.
 	 */
 	private Client _Bob, _Alice;
 	/**
+	 * Cracker.
+	 */
+	private Cracker _Eve;
+	/**
 	 * Panel.
 	 */
-	private JPanel _contentPane, _pnlBob, _pnlAlice;
+	private JPanel _contentPane, _pnlBob, _pnlAlice, _pnlEve;
 	/**
 	 * Panel inizializzati Bob e Alice.
 	 */
@@ -82,13 +90,13 @@ public class VHome extends JFrame {
 		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 		// Prendo l'80% della larghezza dello schermo.
 		int widthDesktop = (int) screenSize.getWidth();
-		int widthFrame = (int) ((int) widthDesktop*0.8);
+		int widthFrame = (int) ((int) widthDesktop*0.95);
 		// Prendo l'80% dell'altezza dello schermo.
 		int heightDesktop = (int) screenSize.getHeight();
-		int heightFrame = (int) ((int) heightDesktop*0.8);
+		int heightFrame = (int) ((int) heightDesktop*0.92);
 		// Posizione iniziale
-		int x_position = (int) ((int) widthDesktop*0.1);
-		int y_position = (int) ((int) heightDesktop*0.1);
+		int x_position = (int) ((int) widthDesktop*0.03);
+		int y_position = (int) ((int) heightDesktop*0.01);
 		// Imposto la posizione e la dimensione della finestra (x,y,width,height)
 		setBounds(x_position, y_position, widthFrame, heightFrame);	
 		// Mostro il frame
@@ -103,17 +111,41 @@ public class VHome extends JFrame {
 		// Setto il bordo al contentPane
 		_contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		// Setto il layout al contentPane
-		_layoutContentPane = new GridLayout(2,1,2,0);
+		_layoutContentPane = new GridLayout(3,1,0,10);
 		_contentPane.setLayout(_layoutContentPane);
 		// Aggiungo i pannelli al contentPane.
 		_contentPane.add(creaPanelBaseBob());
-//		_contentPane.add(creaPanelBaseEve());
 		_contentPane.add(creaPanelBaseAlice());
+		_contentPane.add(creaPanelEve());
 		
 		return _contentPane;
 	}
 	/**
-	 * Pannello per creare il pannello relativo a Bob.
+	 * Metodo per creare il pannello relative ad Eve.
+	 * 
+	 * @return Pannello relativo a Eve.
+	 */
+	private JPanel creaPanelEve() {
+		// Inizializzo Eve
+		_Eve = new Cracker();
+		// Creo pannello
+		_pnlEve = new JPanel();
+		// Assegno il gestore del layout.
+		_pnlEve.setLayout(new GridLayout(1, 3, 10, 0));
+		// Creo i bottoni per il pannello
+		JButton buttonOttieniChiaveBob = new JButton("Chiave Bob");
+		JButton buttonOttieniChiaveAlice = new JButton("Chiave Alice");
+		// Assegno i listener agli eventi dei bottoni
+		buttonOttieniChiaveBob.addMouseListener(new OttieniChiaveClientListener("Bob"));
+		buttonOttieniChiaveAlice.addMouseListener(new OttieniChiaveClientListener("Alice"));
+		// Aggiungo i bottoni al panel
+		_pnlEve.add(buttonOttieniChiaveBob);
+		_pnlEve.add(buttonOttieniChiaveAlice);
+		
+		return _pnlEve;
+	}
+	/**
+	 * Metodo per creare il pannello relativo a Bob.
 	 * 
 	 * @return Pannello relativo a Bob.
 	 */
@@ -190,10 +222,9 @@ public class VHome extends JFrame {
 		// Setto layout
 		pnlGestioneClient.setLayout(new GridLayout(3, 1, 0, 3));
 		
-		
 		// Aggiungo panel al pnlContenitoreClient
 		pnlContenitoreClient.add(this.creaScrollPaneChiavi(nomeClient));
-		pnlContenitoreClient.add(pnlGestioneClient);
+		pnlContenitoreClient.add(this.creaPanelGestioneClient(nomeClient));
 		
 		return pnlContenitoreClient;
 	}
@@ -248,6 +279,45 @@ public class VHome extends JFrame {
 		return scrollPaneChiavi;
 	}
 	/**
+	 * Metodo per creare il pannello di gestione del client.
+	 * 
+	 * @param nomeClient Client per il quale si crea il pannello di gestione.
+	 * @return Pannello contenente gli strumenti di gestione.
+	 */
+	private JPanel creaPanelGestioneClient(String nomeClient) {
+		// Panel nel quale si inseriranno i bottoni.
+		JPanel panelGestioneClient = new JPanel();
+		// Setto il layout
+		panelGestioneClient.setLayout(new GridLayout(3, 1, 0, 10));
+			// Pannello dove inserisco i due bottoni di inizializzazione
+			JPanel panelBottoniInizializzazione = new JPanel();
+			// Setto layout
+			panelBottoniInizializzazione.setLayout(new GridLayout(1,2,10,0));
+			// Creo i bottoni
+			JButton buttonRestartClientSicuro = new JButton("Restart sicuro");
+			JButton buttonRestartClientInsicuro = new JButton("Restart insicuro");
+			// Aggiungo i listener ai bottoni.
+			buttonRestartClientSicuro.addMouseListener(new InizializzaClientListener(nomeClient, true));
+			buttonRestartClientInsicuro.addMouseListener(new InizializzaClientListener(nomeClient, false));
+			// Aggiungo elementi al pannello
+			panelBottoniInizializzazione.add(buttonRestartClientSicuro);
+			panelBottoniInizializzazione.add(buttonRestartClientInsicuro);
+		// Creo i bottoni
+		JButton buttonInviaMessaggi = new JButton("Invia messaggio");
+		JButton buttonleggiUltimoMessaggio = new JButton("Leggi ultimo messaggio");
+		// Aggiungo i listener ai bottoni.
+		buttonInviaMessaggi.addMouseListener(new InviaMessaggioListener(nomeClient));
+		buttonleggiUltimoMessaggio.addMouseListener(new LeggiUltimoMessaggioListener(nomeClient));
+		// Aggiungo elementi al pannello.
+		panelGestioneClient.add(panelBottoniInizializzazione);
+		panelGestioneClient.add(buttonInviaMessaggi);
+		panelGestioneClient.add(buttonleggiUltimoMessaggio);
+		
+		return panelGestioneClient;
+	}
+	
+	
+	/**
 	 * Metodo per creare un pannello contenente un bottone per inizializzare il client.
 	 * 
 	 * @return Pannello contenente un bottone per inizializzare il client.
@@ -259,16 +329,12 @@ public class VHome extends JFrame {
 		// Creo il bottone
 		JButton btnInizializzazione = new JButton("Inizializza " + nomeClient);
 		// Aggiungo il listener dell'evento di inizializzazione.
-		btnInizializzazione.addMouseListener(new InizializzaClientListener(nomeClient));
+		btnInizializzazione.addMouseListener(new InizializzaClientListener(nomeClient,true));
 		// Aggiungo il bottone al pannello
 		pnlInizializzazione.add(btnInizializzazione);
 		
 		return pnlInizializzazione;
 	}
-	
-	
-	
-	
 	
 	/**
 	 * @return the _Bob
@@ -294,6 +360,20 @@ public class VHome extends JFrame {
 	public void set_Alice(Client _Alice) {
 		this._Alice = _Alice;
 	}
+	/**
+	 * @return the _Eve
+	 */
+	public Cracker get_Eve() {
+		return _Eve;
+	}
+
+	/**
+	 * @param _Eve the _Eve to set
+	 */
+	public void set_Eve(Cracker _Eve) {
+		this._Eve = _Eve;
+	}
+
 	/**
 	 * @return the _pnlBob
 	 */

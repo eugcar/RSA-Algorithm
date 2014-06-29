@@ -25,8 +25,10 @@ public class MacchinaRSA {
 	public MessaggioCifrato fromMessaggioChiaroToMessaggioCifrato(MessaggioChiaro messaggioChiaro) {
 		// Contenuto del messaggio
 		String stringaChiaro = messaggioChiaro.get_messaggioChiaro();
-		// Chiave pubblica del destinatario del messaggio
-		PublicKey publicKeyDestinatario = messaggioChiaro.get_destinatario().get_publicKey();
+		// Recupero il nome del destinatario del messaggio
+		String nomeClientDestinatario = messaggioChiaro.get_destinatario().get_nomeClient();
+		// Recupero dall'archivio delle chiavi la chiave del destinatario.
+		PublicKey publicKeyDestinatario = ArchivioChiaviPubbliche.getInstance().ottieniChiaveClient(nomeClientDestinatario);
 		// Converto la stringa in integer
 		BigInteger integerChiaro = this.toBigInteger(stringaChiaro);
 		// Cifro l'integer
@@ -43,8 +45,11 @@ public class MacchinaRSA {
 	 * @return Messaggio in chiaro.
 	 */
 	public MessaggioChiaro fromMessaggioCifratoToMessaggioChiaro(MessaggioCifrato messaggioCifrato) {
+		// Recupero il nome del destinatario del messaggio
+		String nomeClientDestinatario = messaggioCifrato.get_destinatario().get_nomeClient();
+		// Recupero dall'archivio delle chiavi la chiave del destinatario.
+		PublicKey publicKeyDestinatario = ArchivioChiaviPubbliche.getInstance().ottieniChiaveClient(nomeClientDestinatario);
 		// Recupero la chiave pubblica e privata del Client Destinatario.
-		PublicKey publicKeyDestinatario = messaggioCifrato.get_destinatario().get_publicKey();
 		PrivateKey privateKeyDestinatario = messaggioCifrato.get_destinatario().get_privateKey();
 		// Contenuto del messaggio
 		BigInteger integerCifrato = messaggioCifrato.get_messaggioCifrato();

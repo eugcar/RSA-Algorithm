@@ -3,8 +3,6 @@
  */
 package com.RSA.model.algoritmoAttaccoEsponenteBassiWiener;
 
-import java.math.BigInteger;
-
 import com.RSA.model.algoritmoRSA.PrivateKey;
 import com.RSA.model.algoritmoRSA.PublicKey;
 
@@ -16,6 +14,7 @@ import com.RSA.model.algoritmoRSA.PublicKey;
 public interface IAlgoritmoAttaccoEsponenteBassoWienerStrategy {
 	/**
 	 * Metodo per calcolare i fattori primi di n.
+	 * 
 	 * @param e Esponente di cifratura dell'algoritmo RSA.
 	 * @param n Numero prodotto dei fattori primi p e q.
 	 * @return Chiave privata di un client. Null altrimenti.
