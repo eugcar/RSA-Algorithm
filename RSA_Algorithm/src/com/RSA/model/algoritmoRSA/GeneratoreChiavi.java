@@ -30,7 +30,7 @@ public class GeneratoreChiavi {
 		long time = Calendar.getInstance().getTime().getTime();
 		BigInteger timestamp = new BigDecimal(time).toBigInteger().multiply(new BigInteger("1000"));
 		// Il punto di partenza è dato da 10^100 + timestamp*1000.
-		BigInteger numberStart_p = new BigInteger("10").pow(100).add(timestamp);
+		BigInteger numberStart_p = new BigInteger("10").pow(30).add(timestamp);
 		// Calcolo p
 		BigInteger p = getFirstPrimeNumberAfterNumber(numberStart_p, _accuracy);
 		BigInteger p_meno_1 = p.subtract(BigInteger.ONE);

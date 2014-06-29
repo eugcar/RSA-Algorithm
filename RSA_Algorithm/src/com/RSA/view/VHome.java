@@ -35,11 +35,11 @@ public class VHome extends JFrame {
 	/**
 	 * Panel.
 	 */
-	private JPanel _contentPane, _pnlBob, _pnlBobInizializzato, _pnlEve, _pnlEveInizializzato, _pnlAlice, _pnlAliceInizializzato;
+	private JPanel _contentPane, _pnlBob, _pnlAlice;
 	/**
-	 * ScrollPane
+	 * Panel inizializzati Bob e Alice.
 	 */
-	private JScrollPane _scrollPaneBobInizializzato, _scrollPaneAliceInizializzato;
+	private JPanel _panelBobInizializzato, _panelAliceInizializzato;
 	/**
 	 * Gestore del layout del contentPane.
 	 */
@@ -103,11 +103,11 @@ public class VHome extends JFrame {
 		// Setto il bordo al contentPane
 		_contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		// Setto il layout al contentPane
-		_layoutContentPane = new GridLayout(1,3,0,5);
+		_layoutContentPane = new GridLayout(2,1,2,0);
 		_contentPane.setLayout(_layoutContentPane);
 		// Aggiungo i pannelli al contentPane.
 		_contentPane.add(creaPanelBaseBob());
-		_contentPane.add(creaPanelBaseEve());
+//		_contentPane.add(creaPanelBaseEve());
 		_contentPane.add(creaPanelBaseAlice());
 		
 		return _contentPane;
@@ -128,7 +128,7 @@ public class VHome extends JFrame {
 		return _pnlBob;
 	}
 	/**
-	 * Metodo per aggiungere una scheda al pannello di Bob
+	 * Metodo per creare il pannello, successivo all'inizializzazione del client.
 	 * 
 	 * @param Bob Client Bob.
 	 */
@@ -136,46 +136,13 @@ public class VHome extends JFrame {
 		// Setto Bob come attributo della finestra
 		_Bob = Bob;
 		// Creo lo scrollPane
-		_scrollPaneBobInizializzato = new JScrollPane();
-		// Creo il pannello
-		_pnlBobInizializzato = new JPanel();
-		// Setto il gestore del layout
-		_pnlBobInizializzato.setLayout(new GridLayout(10, 1, 0, 5));
-		// Creo elementi del pannello
-		JLabel lbl_N = new JLabel("n: " + _Bob.get_publicKey().get_n().toString());
-		JLabel lbl_E = new JLabel("e: " + _Bob.get_publicKey().get_e().toString());
-		JLabel lbl_P = new JLabel("p: " + _Bob.get_privateKey().get_p().toString());
-		JLabel lbl_Q = new JLabel("q: " + _Bob.get_privateKey().get_q().toString()); 
-		JLabel lbl_D = new JLabel("d: " + _Bob.get_privateKey().get_d().toString());
-		// Aggiungo elementi al pannello.
-		_pnlBobInizializzato.add(new JLabel("Public Key:"));
-		_pnlBobInizializzato.add(lbl_N);
-		_pnlBobInizializzato.add(lbl_E);
-		_pnlBobInizializzato.add(new JLabel("Private Key:"));
-		_pnlBobInizializzato.add(lbl_P);
-		_pnlBobInizializzato.add(lbl_Q);
-		_pnlBobInizializzato.add(lbl_D);
-		
-		// Setto il campo visibile dello scrollPane in base al pnlBobInizializzato
-		_scrollPaneBobInizializzato.setViewportView(_pnlBobInizializzato);
-		
+		_panelBobInizializzato = this.creaPannelloClientInizializzato("Bob");		
 		// Aggiungo lo scrollPane al pnlBob
-		_pnlBob.add(_scrollPaneBobInizializzato);
+		_pnlBob.add(_panelBobInizializzato);
 		// Cambio scheda
 		_layoutBob.next(_pnlBob);
 		
-	}
-	/**
-	 * Metodo per creare il pannello relativo ad Eve.
-	 * 
-	 * @return Pannello relativo ad Eve.
-	 */
-	private JPanel creaPanelBaseEve() {
-		_pnlEve = new JPanel();
-		
-		return _pnlEve;
-	}
-	
+	}	
 	/**
 	 * Metodo per creare il pannello relativo ad Alice.
 	 * 
@@ -200,33 +167,85 @@ public class VHome extends JFrame {
 		// Setto Alice come attributo della finestra
 		_Alice = Alice;
 		// Creo lo scrollPane
-		_scrollPaneAliceInizializzato = new JScrollPane();
-		// Creo il pannello
-		_pnlAliceInizializzato = new JPanel();
-		// Setto il gestore del layout
-		_pnlAliceInizializzato.setLayout(new GridLayout(10, 1, 0, 5));
-		// Creo elementi del pannello
-		JLabel lbl_N = new JLabel("n: " + _Alice.get_publicKey().get_n().toString());
-		JLabel lbl_E = new JLabel("e: " + _Alice.get_publicKey().get_e().toString());
-		JLabel lbl_P = new JLabel("p: " + _Alice.get_privateKey().get_p().toString());
-		JLabel lbl_Q = new JLabel("q: " + _Alice.get_privateKey().get_q().toString()); 
-		JLabel lbl_D = new JLabel("d: " + _Alice.get_privateKey().get_d().toString());
-		// Aggiungo elementi al pannello.
-		_pnlAliceInizializzato.add(new JLabel("Public Key:"));
-		_pnlAliceInizializzato.add(lbl_N);
-		_pnlAliceInizializzato.add(lbl_E);
-		_pnlAliceInizializzato.add(new JLabel("Private Key:"));
-		_pnlAliceInizializzato.add(lbl_P);
-		_pnlAliceInizializzato.add(lbl_Q);
-		_pnlAliceInizializzato.add(lbl_D);
-		
-		// Setto il campo visibile dello scrollPane in base al _pnlAliceInizializzato
-		_scrollPaneAliceInizializzato.setViewportView(_pnlAliceInizializzato);
-		
+		_panelAliceInizializzato = this.creaPannelloClientInizializzato("Alice");
 		// Aggiungo lo scrollPane al _pnlAlice.
-		_pnlAlice.add(_scrollPaneAliceInizializzato);
+		_pnlAlice.add(_panelAliceInizializzato);
 		// Cambio scheda
 		_layoutAlice.next(_pnlAlice);
+	}
+	/**
+	 * Metodo per generare uno scrollPane contenente le chiavi di un client.
+	 * 
+	 * @param nomeClient Client per il quale si vogliono generare le chiavi
+	 * @return ScrollPane contenente le chiavi di un Client.
+	 */
+	private JPanel creaPannelloClientInizializzato(String nomeClient) {
+		
+		// Creo Pannello contenitore
+		JPanel pnlContenitoreClient = new JPanel();
+		// Setto il gestore del layout
+		pnlContenitoreClient.setLayout(new GridLayout(1, 2, 0, 5));
+		// Pannello contenente bottoni per leggere gli ultimi messaggi, per inviare di nuovi...
+		JPanel pnlGestioneClient = new JPanel();
+		// Setto layout
+		pnlGestioneClient.setLayout(new GridLayout(3, 1, 0, 3));
+		
+		
+		// Aggiungo panel al pnlContenitoreClient
+		pnlContenitoreClient.add(this.creaScrollPaneChiavi(nomeClient));
+		pnlContenitoreClient.add(pnlGestioneClient);
+		
+		return pnlContenitoreClient;
+	}
+	/**
+	 * Metodo per creare lo scrollPane contenente le chiavi del Client.
+	 * 
+	 * @param nomeClient Nome del Client per il quale si vogliono mostrare le chiavi.
+	 * @return ScrollPane contenente le chiavi del client.
+	 */
+	private JScrollPane creaScrollPaneChiavi(String nomeClient) {
+		// Creo lo scrollPane
+		JScrollPane scrollPaneChiavi = new JScrollPane();
+		// Creo il pannello
+		JPanel panelChiavi = new JPanel();
+		// Setto il gestore del layout
+		panelChiavi.setLayout(new GridLayout(7, 1, 0, 2));
+		// Label dove inserire le chiavi
+		JLabel lbl_N=null, lbl_E=null, lbl_P=null, lbl_Q=null, lbl_D=null;
+		// Genero l'elenco di chiavi in base al client richiedente.
+		switch (nomeClient) {
+		case "Bob":
+			// Creo elementi del pannello per BOB
+			lbl_N = new JLabel("n: " + _Bob.get_publicKey().get_n().toString());
+			lbl_E = new JLabel("e: " + _Bob.get_publicKey().get_e().toString());
+			lbl_P = new JLabel("p: " + _Bob.get_privateKey().get_p().toString());
+			lbl_Q = new JLabel("q: " + _Bob.get_privateKey().get_q().toString()); 
+			lbl_D = new JLabel("d: " + _Bob.get_privateKey().get_d().toString());
+			break;
+		case "Alice":
+			// Creo elementi del pannello per ALICE
+			lbl_N = new JLabel("n: " + _Alice.get_publicKey().get_n().toString());
+			lbl_E = new JLabel("e: " + _Alice.get_publicKey().get_e().toString());
+			lbl_P = new JLabel("p: " + _Alice.get_privateKey().get_p().toString());
+			lbl_Q = new JLabel("q: " + _Alice.get_privateKey().get_q().toString()); 
+			lbl_D = new JLabel("d: " + _Alice.get_privateKey().get_d().toString());
+			break;
+		default:
+			break;
+			
+		}
+		// Aggiungo elementi al pannello.
+		panelChiavi.add(new JLabel("Public Key:"));
+		panelChiavi.add(lbl_N);
+		panelChiavi.add(lbl_E);
+		panelChiavi.add(new JLabel("Private Key:"));
+		panelChiavi.add(lbl_P);
+		panelChiavi.add(lbl_Q);
+		panelChiavi.add(lbl_D);
+		// Setto il campo visibile dello scrollPane in base al _pnlAliceInizializzato
+		scrollPaneChiavi.setViewportView(panelChiavi);
+		
+		return scrollPaneChiavi;
 	}
 	/**
 	 * Metodo per creare un pannello contenente un bottone per inizializzare il client.
