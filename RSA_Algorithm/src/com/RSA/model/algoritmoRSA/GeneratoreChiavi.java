@@ -5,8 +5,11 @@ package com.RSA.model.algoritmoRSA;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
-import java.util.Calendar;
+import java.security.SecureRandom;
+import java.util.Iterator;
+import java.util.List;
 
+import com.RSA.model.Utility;
 import com.RSA.model.algoritmoTestPrimalita.AlgoritmoTestPrimalitaMillerRabinStrategy;
 import com.RSA.model.algoritmoTestPrimalita.IAlgoritmoTestPrimalitaStrategy;
 
@@ -21,7 +24,15 @@ public class GeneratoreChiavi {
 	/**
 	 * Probabilità che i numeri primi generati siano effettivamente primi, con probabilità pari ad (1/4)^_accuracy.
 	 */
-	private static int _accuracy = 10;
+	private static int _accuracy = 100;
+	/**
+	 * Numero di bit della chiave.
+	 */
+	private static int _numeroBitChiave = 512;
+	/**
+	 * Limite superiore alla ricerca dei numeri primi che non sono divisori di un certo numero intero.
+	 */
+	private static BigInteger _upperBoundRicercaPrimi = new BigInteger("256");
 
 	/**
 	 * Metodo per generare la chiave pubblica e privata di un client (Alice, Bob).
@@ -29,16 +40,17 @@ public class GeneratoreChiavi {
 	public static void generaChiavi(Client client, Boolean sicuro) {
 		// Elementi della chiave
 		BigInteger p=null, q=null, d=null, e=null, n=null; 
-		// Prendo il timestamp e lo moltiplico per 1000.
-		long time = Calendar.getInstance().getTime().getTime();
-		BigInteger timestamp = new BigDecimal(time).toBigInteger().multiply(new BigInteger("1000"));
-		// Il punto di partenza è dato da 10^100 + timestamp*1000.
-		BigInteger numberStart_p = new BigInteger("10").pow(100).add(timestamp);
+		// Oggetto responsabile della creazione del numero randomico
+		SecureRandom secureRandom = new SecureRandom();
+		// Il punto di partenza è un numero intero compreso tra 0 e 2^(_numBit-1).
+		BigInteger numberStart_p = new BigInteger(_numeroBitChiave, secureRandom);
 		// Calcolo p e p-1
 		p = getFirstPrimeNumberAfterNumber(numberStart_p, _accuracy);
 		BigInteger p_meno_1 = p.subtract(BigInteger.ONE);
+		// Il punto di partenza è un numero intero compreso tra 0 e 2^(_numBit-1).
+		BigInteger numberStart_q = new BigInteger(_numeroBitChiave, secureRandom);
 		// Calcolo q e q-1
-		q = getFirstPrimeNumberAfterNumber(p.add(numberStart_p), _accuracy);
+		q = getFirstPrimeNumberAfterNumber(numberStart_q, _accuracy);
 		BigInteger q_meno_1 = q.subtract(BigInteger.ONE);
 		// Calcolo fi_n = (p-1)*(q-1)
 		BigInteger fi_n = p_meno_1.multiply(q_meno_1);
@@ -94,31 +106,83 @@ public class GeneratoreChiavi {
 	 * @param number Numero dal quale avviare la ricerca.
 	 * @param accuracy Precisione nella valutazione di primalità.
 	 */
-	private static BigInteger getFirstPrimeNumberAfterNumber(BigInteger number, int accuracy) {
+	public static BigInteger getFirstPrimeNumberAfterNumber(BigInteger number, int accuracy) {
 		// Numero primo da restituire
 		BigInteger primeNumber = null;
 		// Booleano che rappresenta la condizione di uscita.
 		boolean trovato = false;
-		// Prendo la strategia di verifica della primalità
-		IAlgoritmoTestPrimalitaStrategy algoritmoTestPrimalitaStrategy = new AlgoritmoTestPrimalitaMillerRabinStrategy();		
+		// Strategia
+		IAlgoritmoTestPrimalitaStrategy algoritmoTestPrimalitaStrategy = new AlgoritmoTestPrimalitaMillerRabinStrategy();
+//		System.out.println("Numero di partenza: " + number);
 		
+		// Carico la lista dei numeri primi precedenti a number.
+		List<BigInteger> listaNumeriPrimiPrecedentiNumber = Utility.getListaPrimiPrecedentiNumer(_upperBoundRicercaPrimi, _accuracy);
 		// Ciclo finchè non trovo il numero primo.
 		while(!trovato) {
-			// Testo la primalità del numero
+			// Effettuo il test
 			trovato = algoritmoTestPrimalitaStrategy.testaPrimalitaIntero(number, accuracy);					
 			// Se l'esito del test è positivo assegno il valore di number a primeNumber.
 			if (trovato == true) {		
 				primeNumber = number;
-			} else {
-				/* Se non trovo il numero primo, chiedo a Java di fornirmene uno probabilmente primo,
-				 * la probabilità che offre Java è di 2^(-100), con l'algoritmo sviluppato attraverso il test
-				 * di Miller-Rabin, si può ottenere una probabilità pari a 4^(-_accuracy), quindi l'utilizzatore
-				 * può scegliere con che probabilità vuole effettuare il test.
+			} else {			
+				/* 
+				 * Ricavo il numero intero, successivo a number, buon candidato ad essere un numero primo.
 				 */
-				number = number.nextProbablePrime();
+				number = GeneratoreChiavi.nextIntegerNotDivisibleBySeveralPrime(number, listaNumeriPrimiPrecedentiNumber);
 			}
 		}
-		
+//		System.out.println("Prime number: " + primeNumber);
+	
 		return primeNumber;
+	}
+	/**
+	 * Metodo per ottenere un numero intero successivo a quello dato, non divisibile dalla lista
+	 * dei numeri primi precedenti all'attributo _upperBoundRicercaPrimi
+	 * 
+	 * @param number Numero dal quale si parte per effettuare il test.
+	 * @param listaPrimi Lista dei primi sulla quale effettuare il test.
+	 * 
+	 * @return Numero intero non divisibile dalla lista dei numeri primi precedenti di _upperBoundRicercaPrimi
+	 */
+	private static BigInteger nextIntegerNotDivisibleBySeveralPrime(BigInteger number, List<BigInteger> listaPrimi) {
+		// BigInteger da restituire
+		BigInteger integerNotDivisibleBySeveralPrime = null;
+		// Condizione di uscita dal ciclo
+		boolean trovato = false;		
+		// Incremento number di 1, per passare ad effettuare il testing dal primo numero successivo a quello dato.
+		number = number.add(BigInteger.ONE);
+		// Ciclo finche non trovo un buon numero
+		while(!trovato) {
+			/* 
+			 * Condizione per verificare se il numero da testare in questa iterazione del 
+			 * ciclo è o meno multiplo della lista dei primi.
+			 */	
+			boolean multiplo = false;
+			// Ciclo per verificare che il numero nell'iterazione corrente non sia multiplo di un numero primo.
+			for (Iterator<BigInteger> iterator = listaPrimi.iterator(); iterator.hasNext();) {
+				// Generico elemento della lista
+				BigInteger primeNumber = (BigInteger) iterator.next();			
+				// Verifico che number non sia multiplo di primeNumber
+				if (Utility.A_multiplo_B(number, primeNumber) == true) {
+					multiplo = true;
+				}
+			}
+			/* 
+			 * Se il numero appena testato è un multiplo di uno dei primi, incremento 
+			 * di uno e al prossimo ciclo testo nuovamente.
+			 */
+			if (multiplo == true) {
+				number = number.add(BigInteger.ONE);
+			} else {
+				/*
+				 * Se il numero appena testato non era multiplo di nessuno dei primi allora 
+				 * è un buon candidato e usciamo dal ciclo.
+				 */
+				trovato = true;
+				// Assegno il valore del numero trovato alla variabile da fornire in output.
+				integerNotDivisibleBySeveralPrime = new BigInteger(number.toString());
+			}
+		}
+		return integerNotDivisibleBySeveralPrime;	
 	}
 }

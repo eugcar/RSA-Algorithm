@@ -48,8 +48,6 @@ public class OttieniChiaveClientListener extends MouseAdapter {
 		Client Bob = home.get_Bob();
 		Client Alice = home.get_Alice();
 		Cracker Eve = home.get_Eve();
-		// Recupero la strategia da utilizzare per provare a ricavare la chiave privata di Bob.
-		IAlgoritmoAttaccoEsponenteBassoWienerStrategy algoritmoWiener = new AlgoritmoAttaccoEsponenteBassoWienerDefaultStrategy();
 		// Individuo quale Client sto trattando.
 		switch (_nomeClient) {
 		case "Bob":

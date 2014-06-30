@@ -31,52 +31,42 @@ public class AlgoritmoTestPrimalitaMillerRabinStrategy implements IAlgoritmoTest
 	 */
 	private BigInteger _y;
 	
-	/**
-	 * Costruttore.
-	 */
-	public AlgoritmoTestPrimalitaMillerRabinStrategy() {
-		_s = BigInteger.ZERO;
-		_r = BigInteger.ZERO;
-	}
-	
 	/* (non-Javadoc)
 	 * @see com.RSA.model.algoritmoTestPrimalita.IAlgoritmoTestPrimalitaStrategy#testaPrimalitaIntero(java.math.BigInteger, int)
 	 */
 	public boolean testaPrimalitaIntero(BigInteger n, int times) {
-		
-		// Controllo che n sia dispari.
-		if(!Utility.isPari(n)) {
-			// Calcolo r,s tali che n-1 = 2^s * r
-			this.calcola_r_s(n);
-			// Ciclo times volte.
-			for (int i = 0; i < times; i++) {
-				// Genero un numero casuale nell'intervallo [2, n-2]
-				_a = Utility.generaInteroCasualeInIntervallo(new BigInteger("2"), n.subtract(new BigInteger("2")));
-				// Calcolo y = a^r (mod n)
-				_y = _a.modPow(_r, n);
-				// Controllo che y sia diverso da 1 e da n-1
-				if((_y.compareTo(BigInteger.ONE) != 0) && (_y.compareTo(n.subtract(new BigInteger("2"))) != 0 )) {
-					// Ciclo per j che va da 1 a s-1
-					for (int j = 1; j < _s.intValue(); j++) {
-						// Controllo che y != n-1
-						if(_y.compareTo(n.subtract(new BigInteger("1"))) != 0) {
-							// y = y^2 (mod n)
-							_y = _y.modPow(new BigInteger("2"), n);
-							// Se y = 1, numero composto
-							if (_y.compareTo(BigInteger.ONE) == 0) {
-								return false;
-							}
-						}	
-					}
-					// Se y != n - 1, numero composto
+		// Inizializzo _s e _r nulli.
+		_s = BigInteger.ZERO;
+		_r = BigInteger.ZERO;
+		// Calcolo r,s tali che n-1 = 2^s * r
+		this.calcola_r_s(n);
+		// Ciclo times volte.
+		for (int i = 0; i < times; i++) {
+			// Genero un numero casuale nell'intervallo [2, n-2]
+			_a = Utility.generaInteroCasualeInIntervallo(new BigInteger("2"), n.subtract(new BigInteger("2")));
+			// Calcolo y = a^r (mod n)
+			_y = _a.modPow(_r, n);
+			// Controllo che y sia diverso da 1 e da n-1
+			if((_y.compareTo(BigInteger.ONE) != 0) && (_y.compareTo(n.subtract(new BigInteger("2"))) != 0 )) {
+				// Ciclo per j che va da 1 a s-1
+				for (int j = 1; j < _s.intValue(); j++) {
+					// Controllo che y != n-1
 					if(_y.compareTo(n.subtract(new BigInteger("1"))) != 0) {
-						return false;
-					}
+						// y = y^2 (mod n)
+						_y = _y.modPow(new BigInteger("2"), n);
+						// Se y = 1, numero composto
+						if (_y.compareTo(BigInteger.ONE) == 0) {
+							return false;
+						}
+					}	
+				}
+				// Se y != n - 1, numero composto
+				if(_y.compareTo(n.subtract(new BigInteger("1"))) != 0) {
+					return false;
 				}
 			}
-			return true;
 		}
-		return false;
+		return true;
 	}
 	/**
 	 * Metodo per calcolare i componenti dell'equazione n-1=2^s * r.

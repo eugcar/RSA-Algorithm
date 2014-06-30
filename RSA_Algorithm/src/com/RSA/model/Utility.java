@@ -4,7 +4,12 @@
 package com.RSA.model;
 
 import java.math.BigInteger;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Random;
+
+import com.RSA.model.algoritmoTestPrimalita.AlgoritmoTestPrimalitaMillerRabinStrategy;
+import com.RSA.model.algoritmoTestPrimalita.IAlgoritmoTestPrimalitaStrategy;
 
 /**
  * Questa classe contiene differenti metodi, utili per il calcolo con numeri interi.
@@ -23,6 +28,22 @@ public class Utility {
 		// Esito della domanda.
 		boolean esito = false;
 		// Controllo se A divide B. Ovvero se il resto dalla divisione è zero.
+		if (A.remainder(B).compareTo(BigInteger.ZERO) == 0) {
+			esito = true;
+		}
+		return esito;
+	}
+	/**
+	 * Metodo per verificare che un intero A, sia un multiplo di B
+	 * 
+	 * @param A Numero su cui si vuole effettuare il test per verificare che sia multiplo di B.
+	 * @param B 
+	 * @return True se A è un multiplo di B. False altrimenti.
+	 */
+	public static boolean A_multiplo_B(BigInteger A, BigInteger B) {
+		// Esito della domanda.
+		boolean esito = false;
+		// Controllo se A è un multiplo di B. Ovvero se il resto dalla divisione è zero.
 		if (A.remainder(B).compareTo(BigInteger.ZERO) == 0) {
 			esito = true;
 		}
@@ -58,6 +79,40 @@ public class Utility {
 		}
 		return esito;
 	}
+	/**
+	 * Metodo per ottenere la lista dei numeri primi, precedenti al numero dato.
+	 * 
+	 * @param number Upper bound, della lista dei numeri primi.
+	 * @param accuracy Accuratezza della verifica di primalità.
+	 * @return Lista dei numeri primi precedenti al numero dato.
+	 */
+	public static List<BigInteger> getListaPrimiPrecedentiNumer(BigInteger number, int accuracy) {
+		// Lista nella quale inserire i primi, precedenti al numero dato
+		List<BigInteger> listaPrimiPrecedentiNumero = new LinkedList<BigInteger>();
+		// Algoritmo per testare la primalità di un numero
+		IAlgoritmoTestPrimalitaStrategy algoritmoTestPrimalitaStrategy = new AlgoritmoTestPrimalitaMillerRabinStrategy();
+		// Generico elemento da testare
+		BigInteger integerToTest = null;		
+		// Esito del test sul generico elemento
+		boolean esito;
+		// Ciclo fino ad arrivare all'upper boud
+		for (int i = 3; i < number.intValue(); i++) {
+			integerToTest = new BigInteger(String.valueOf(i));
+			// Verifico che il numero sia dispari
+			if (!Utility.isPari(integerToTest)) {
+				// Applico il test
+				esito = algoritmoTestPrimalitaStrategy.testaPrimalitaIntero(integerToTest, accuracy);
+				// integerToTest è un numero primo, allora lo aggiungo alla lista.
+				if (esito == true) {
+					listaPrimiPrecedentiNumero.add(integerToTest);
+//					System.out.println("primo: " + integerToTest.toString());
+				}
+			}
+		}
+		
+		return listaPrimiPrecedentiNumero;
+	}
+	
 	/**
 	 * Metodo per generare un numero casuale nell'intervallo [min,max].
 	 * @param min Estremo inferiore dell'intervallo.

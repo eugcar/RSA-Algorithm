@@ -12,7 +12,7 @@ import java.math.BigInteger;
  */
 public interface IAlgoritmoTestPrimalitaStrategy {
 	/**
-	 * Testa la primalità del numero intero n, per diverse volte.
+	 * Testa la primalità del numero intero dispari n, per diverse volte.
 	 * 
 	 * @param n Numero intero da testare.
 	 * @param times Numero di volte in cui effettuare il test.

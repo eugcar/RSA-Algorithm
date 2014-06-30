@@ -29,7 +29,7 @@ public class Main {
 //		algoritmoWiener.calcolaPrivateKeyClient(publicKey);
 		
 //		IAlgoritmoTestPrimalitaStrategy algoritmoTestPrimalita = new AlgoritmoTestPrimalitaMillerRabinStrategy();
-//		boolean esito=algoritmoTestPrimalita.testaPrimalitaIntero(new BigInteger("66666666666666666666666666666666666666666666666666666666666666666666666666666666666685385908489083983333333333333333333333333333333333333333333333333333333333333333333334647370887356349269146535184543"), 10000);
+//		boolean esito=algoritmoTestPrimalita.testaPrimalitaIntero(new BigInteger("93"), 100);
 //		// Controllo l'esito della prova.
 //		if (esito == true) {
 //			System.out.println("PRIMO");
@@ -39,7 +39,8 @@ public class Main {
 		
 		VHome.getInstance();
 		
-		
+//		GeneratoreChiavi.getFirstPrimeNumberAfterNumber(new BigInteger("1114136349812739281739812738921793712893712938912711"), 100);
+//		Utility.getListaPrimiPrecedentiNumer(new BigInteger("100"), 100);
 		
 	}
 }
