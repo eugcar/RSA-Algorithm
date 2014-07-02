@@ -2,7 +2,6 @@
  * 
  */
 package com.RSA.main;
-
 import com.RSA.view.VHome;
 
 /**
@@ -22,7 +21,7 @@ public class Main {
 //		calcoloFrazioneContinuaStrategy.calcolaFrazioneContinua(frazione);
 //		
 //		IAlgoritmoEuclideoStrategy algoritmoEuclideo = new AlgoritmoEuclideoDefaultStrategy();
-//		algoritmoEuclideo.calcolaMCD(new BigInteger("1114136349812739281739812738921793712893712938912711"), new BigInteger("12"));
+//		System.out.println(algoritmoEuclideo.CalcolaMCD(new BigInteger("1113"),new BigInteger("20")).toString());
 		
 //		IAlgoritmoAttaccoEsponenteBassoWienerStrategy algoritmoWiener = new AlgoritmoAttaccoEsponenteBassoWienerDefaultStrategy();
 //		PublicKey publicKey = new PublicKey(new BigInteger("1966981193543797"), new BigInteger("323815174542919"));

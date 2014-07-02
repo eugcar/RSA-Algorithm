@@ -39,7 +39,7 @@ public class GeneratoreChiavi {
 	 */
 	public static void generaChiavi(Client client, Boolean sicuro) {
 		// Elementi della chiave
-		BigInteger p=null, q=null, d=null, e=null, n=null; 
+		BigInteger p=null, q=null, d=null, e=null, n=null, q_meno_1=null; 
 		// Oggetto responsabile della creazione del numero randomico
 		SecureRandom secureRandom = new SecureRandom();
 		// Il punto di partenza è un numero intero compreso tra 0 e 2^(_numBit-1).
@@ -47,11 +47,19 @@ public class GeneratoreChiavi {
 		// Calcolo p e p-1
 		p = getFirstPrimeNumberAfterNumber(numberStart_p, _accuracy);
 		BigInteger p_meno_1 = p.subtract(BigInteger.ONE);
-		// Il punto di partenza è un numero intero compreso tra 0 e 2^(_numBit-1).
-		BigInteger numberStart_q = new BigInteger(_numeroBitChiave, secureRandom);
-		// Calcolo q e q-1
-		q = getFirstPrimeNumberAfterNumber(numberStart_q, _accuracy);
-		BigInteger q_meno_1 = q.subtract(BigInteger.ONE);
+		if (sicuro == true) {
+			// Il punto di partenza è un numero intero compreso tra 0 e 2^(_numBit-1).
+			BigInteger numberStart_q = new BigInteger(_numeroBitChiave, secureRandom);
+			// Calcolo q e q-1
+			q = getFirstPrimeNumberAfterNumber(numberStart_q, _accuracy);
+			q_meno_1 = q.subtract(BigInteger.ONE);
+		} else {
+			/* Calcolo q e q-1. Per calcolare q, prendo il primo successivo a p. 
+			 * In questo modo molto probabilmente p < q < 2p
+			 */
+			q = getFirstPrimeNumberAfterNumber(p, _accuracy);
+			q_meno_1 = q.subtract(BigInteger.ONE);
+		}
 		// Calcolo fi_n = (p-1)*(q-1)
 		BigInteger fi_n = p_meno_1.multiply(q_meno_1);
 		// Calcolo n
@@ -76,7 +84,7 @@ public class GeneratoreChiavi {
 			e = d.modInverse(fi_n);
 		} else {
 			// Calcolo d.
-			BigInteger numberStart_d = new BigInteger("10").pow(2);
+			BigInteger numberStart_d = new BigInteger(10, new SecureRandom());
 			d = getFirstPrimeNumberAfterNumber(numberStart_d, _accuracy);
 			/*
 			 * Calcolo e, in modo tale che e*d = 1 (mod fi_n) 

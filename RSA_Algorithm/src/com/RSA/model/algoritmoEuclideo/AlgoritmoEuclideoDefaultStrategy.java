@@ -77,5 +77,4 @@ public class AlgoritmoEuclideoDefaultStrategy implements IAlgoritmoEuclideoStrat
 		
 		return listaRisultati;
 	}
-
 }

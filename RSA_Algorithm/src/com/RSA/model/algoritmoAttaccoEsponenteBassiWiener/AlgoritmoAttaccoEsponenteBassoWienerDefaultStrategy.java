@@ -37,9 +37,9 @@ public class AlgoritmoAttaccoEsponenteBassoWienerDefaultStrategy implements IAlg
 		BigInteger e = publicKeyClient.get_e();
 		BigInteger n = publicKeyClient.get_n();
 		// Prendo la lista delle frazioni continue di e/n
-		Frazione frazione = new Frazione(e, n);
+		Frazione frazione_e_n = new Frazione(e, n);
 		IAlgoritmoFrazioneContinuaStrategy algoritmoFrazioniContinue = new AlgoritmoFrazioneContinuaDefaultStrategy();
-		List<RisultatoIterazioneCalcoloFrazioneContinua> listaRisultatiFrazioniContinue = algoritmoFrazioniContinue.calcolaFrazioneContinua(frazione);
+		List<RisultatoIterazioneCalcoloFrazioneContinua> listaRisultatiFrazioniContinue = algoritmoFrazioniContinue.calcolaFrazioneContinua(frazione_e_n);
 		// Ciclo su tutti gli elementi delle frazioni continue
 		for (Iterator<RisultatoIterazioneCalcoloFrazioneContinua> iterator = listaRisultatiFrazioniContinue.iterator(); iterator.hasNext();) {
 			// Generico risultato dell'iterazione del calcolo delle frazioni continue.
@@ -47,8 +47,11 @@ public class AlgoritmoAttaccoEsponenteBassoWienerDefaultStrategy implements IAlg
 			// Prendo i valori del risultato della generica iterazione del calcolo delle frazioni continue.
 			A = risultatoIterazioneCalcoloFrazioneContinua.get_frazione().get_numeratore();   // A = k
 			B = risultatoIterazioneCalcoloFrazioneContinua.get_frazione().get_denominatore(); // B = d
-			// Controllo che B = d, sia dispari			
-			if(!Utility.isPari(B)) {				
+			// Verifico che (k/d) - (e/n) > 0
+			Frazione frazione_k_d = new Frazione(A, B);
+			Frazione frazione_k_d_meno_e_n = frazione_k_d.sottrai(frazione_e_n);
+			// Controllo che B = d, sia dispari e che (k/d) - (e/n) > 0		
+			if(!Utility.isPari(B) && frazione_k_d_meno_e_n.isPositiva()) {				
 				// Calcolo C
 				e_B_meno_1 = e.multiply(B).subtract(BigInteger.ONE);
 				// Controllo che C sia un intero. Ovvero che e*B - 1 / A abbia resto nullo.
