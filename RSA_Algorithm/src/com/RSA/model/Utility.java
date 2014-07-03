@@ -86,7 +86,7 @@ public class Utility {
 	 * @param accuracy Accuratezza della verifica di primalità.
 	 * @return Lista dei numeri primi precedenti al numero dato.
 	 */
-	public static List<BigInteger> getListaPrimiPrecedentiNumer(BigInteger number, int accuracy) {
+	public static List<BigInteger> getListaPrimiPrecedentiNumber(BigInteger number, int accuracy) {
 		// Lista nella quale inserire i primi, precedenti al numero dato
 		List<BigInteger> listaPrimiPrecedentiNumero = new LinkedList<BigInteger>();
 		// Algoritmo per testare la primalità di un numero
@@ -95,6 +95,8 @@ public class Utility {
 		BigInteger integerToTest = null;		
 		// Esito del test sul generico elemento
 		boolean esito;
+		// Aggiungo alla lista dei primi 2
+		listaPrimiPrecedentiNumero.add(new BigInteger("2"));
 		// Ciclo fino ad arrivare all'upper boud
 		for (int i = 3; i < number.intValue(); i++) {
 			integerToTest = new BigInteger(String.valueOf(i));

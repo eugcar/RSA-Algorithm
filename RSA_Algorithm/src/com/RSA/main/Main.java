@@ -14,6 +14,9 @@ public class Main {
 	 * @param args
 	 */
 	public static void main(String[] args) {
+		
+		VHome.getInstance();
+		
 //		IAlgoritmoFrazioneContinuaStrategy calcoloFrazioneContinuaStrategy = new AlgoritmoFrazioneContinuaDefaultStrategy();
 //		// Creo la frazione.
 //		Frazione frazione = new Frazione(new BigInteger("323815174542919"), new BigInteger("1966981193543797"));
@@ -34,10 +37,7 @@ public class Main {
 //			System.out.println("PRIMO");
 //		} else {
 //			System.out.println("NON PRIMO");
-//		}
-		
-		VHome.getInstance();
-		
+//		}		
 //		GeneratoreChiavi.getFirstPrimeNumberAfterNumber(new BigInteger("1114136349812739281739812738921793712893712938912711"), 100);
 //		Utility.getListaPrimiPrecedentiNumer(new BigInteger("100"), 100);
 		

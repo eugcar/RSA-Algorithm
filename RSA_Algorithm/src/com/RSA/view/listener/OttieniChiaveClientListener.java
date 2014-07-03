@@ -8,8 +8,6 @@ import java.awt.event.MouseEvent;
 
 import javax.swing.JOptionPane;
 
-import com.RSA.model.algoritmoAttaccoEsponenteBassiWiener.AlgoritmoAttaccoEsponenteBassoWienerDefaultStrategy;
-import com.RSA.model.algoritmoAttaccoEsponenteBassiWiener.IAlgoritmoAttaccoEsponenteBassoWienerStrategy;
 import com.RSA.model.algoritmoRSA.ArchivioChiaviPubbliche;
 import com.RSA.model.algoritmoRSA.Client;
 import com.RSA.model.algoritmoRSA.Cracker;

@@ -33,7 +33,6 @@ public class GeneratoreChiavi {
 	 * Limite superiore alla ricerca dei numeri primi che non sono divisori di un certo numero intero.
 	 */
 	private static BigInteger _upperBoundRicercaPrimi = new BigInteger("256");
-
 	/**
 	 * Metodo per generare la chiave pubblica e privata di un client (Alice, Bob).
 	 */
@@ -98,8 +97,9 @@ public class GeneratoreChiavi {
 		// Setto le chiavi al client
 		client.set_privateKey(privateKeyClient);
 		client.set_publicKey(publicKeyClient);
-		
-		
+	
+//		TESTING
+//		
 //		BigInteger de = d.multiply(e).mod(fi_n);
 //		System.out.println("P: " + p.toString());
 //		System.out.println("Q: " + q.toString());
@@ -124,7 +124,7 @@ public class GeneratoreChiavi {
 //		System.out.println("Numero di partenza: " + number);
 		
 		// Carico la lista dei numeri primi precedenti a number.
-		List<BigInteger> listaNumeriPrimiPrecedentiNumber = Utility.getListaPrimiPrecedentiNumer(_upperBoundRicercaPrimi, _accuracy);
+		List<BigInteger> listaNumeriPrimiPrecedentiNumber = Utility.getListaPrimiPrecedentiNumber(_upperBoundRicercaPrimi, _accuracy);
 		// Ciclo finchè non trovo il numero primo.
 		while(!trovato) {
 			// Effettuo il test
@@ -145,7 +145,7 @@ public class GeneratoreChiavi {
 	}
 	/**
 	 * Metodo per ottenere un numero intero successivo a quello dato, non divisibile dalla lista
-	 * dei numeri primi precedenti all'attributo _upperBoundRicercaPrimi
+	 * dei numeri primi precedenti all'attributo _upperBoundRicercaPrimi.
 	 * 
 	 * @param number Numero dal quale si parte per effettuare il test.
 	 * @param listaPrimi Lista dei primi sulla quale effettuare il test.

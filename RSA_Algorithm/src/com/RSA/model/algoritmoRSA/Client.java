@@ -7,8 +7,9 @@ import java.util.LinkedList;
 import java.util.List;
 
 /**
+ * Questa classe rappresenta il generico client nel dominio RSA.
+ * 
  * @author Eugenio
- *
  */
 public class Client {
 
@@ -39,7 +40,10 @@ public class Client {
 	 * @param nomeClient Nome del client.
 	 */
 	public Client(String nomeClient, Boolean sicuro) {
-		// Genero la chiave del client
+		/*
+		 *  Genero la chiave del client, in modo sicuro o 
+		 *  insicuro in relazione alla scelta degli esponenti.
+		 */
 		GeneratoreChiavi.generaChiavi(this, sicuro);
 		// Inizializzo tutti gli attributi
 		this._nomeClient = nomeClient;
@@ -57,7 +61,7 @@ public class Client {
 	public void inviaMessaggioToClient(MessaggioChiaro messaggioChiaro) {
 		// Si ottiene il messaggio cifrato attraverso la macchinaRSA.
 		MessaggioCifrato messaggioCifrato = _macchinaRSA.fromMessaggioChiaroToMessaggioCifrato(messaggioChiaro);
-		// Si aggiunge l'intero cifrato alla lista dei messaggi ricevuti dell'altro client.
+		// Si aggiunge il messaggio cifrato alla lista dei messaggi ricevuti dell'altro client.
 		messaggioChiaro.get_destinatario().get_messaggiRicevuti().add(messaggioCifrato);
 	}
 	/**
@@ -99,7 +103,6 @@ public class Client {
 		return messaggioCifrato;
 	}
 	
-	
 	/**
 	 * @return the _nomeClient
 	 */
@@ -113,28 +116,28 @@ public class Client {
 		this._nomeClient = _nomeClient;
 	}
 	/**
-	 * @return the _privateKey
-	 */
-	public PrivateKey get_privateKey() {
-		return _privateKey;
-	}
-	/**
 	 * @param _privateKey the _privateKey to set
 	 */
 	public void set_privateKey(PrivateKey _privateKey) {
 		this._privateKey = _privateKey;
 	}
 	/**
-	 * @return the _publicKey
-	 */
-	public PublicKey get_publicKey() {
-		return _publicKey;
-	}
-	/**
 	 * @param _publicKey the _publicKey to set
 	 */
 	public void set_publicKey(PublicKey _publicKey) {
 		this._publicKey = _publicKey;
+	}
+	/**
+	 * @return the _privateKey
+	 */
+	public PrivateKey get_privateKey() {
+		return _privateKey;
+	}
+	/**
+	 * @return the _publicKey
+	 */
+	public PublicKey get_publicKey() {
+		return _publicKey;
 	}
 	/**
 	 * @return the _macchinaRSA

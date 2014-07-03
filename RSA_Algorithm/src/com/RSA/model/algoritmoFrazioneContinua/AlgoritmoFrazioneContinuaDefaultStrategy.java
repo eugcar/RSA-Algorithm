@@ -24,20 +24,16 @@ public class AlgoritmoFrazioneContinuaDefaultStrategy implements IAlgoritmoFrazi
 	 * @see com.RSA.model.ICalcolaFrazioneContinuaStrategy#calcolaFrazioneContinua(java.math.BigInteger, java.math.BigInteger)
 	 */
 	public List<RisultatoIterazioneCalcoloFrazioneContinua> calcolaFrazioneContinua(Frazione frazione) {
-		// Variabili e oggetti utilizzati
-		RisultatoIterazioneCalcoloFrazioneContinua risultatoIterazioneCalcoloFrazioneContinua;
-		BigInteger numeratoreIniziale, denominatoreIniziale, a0, a1, a_n_piu_1;
-		Frazione meno_1, meno_2;
 		// Lista nella quale si inseriranno i risultati del calcolo delle frazioni continue.
 		List<RisultatoIterazioneCalcoloFrazioneContinua> listaRisultatiFrazioniContinue = new ArrayList<RisultatoIterazioneCalcoloFrazioneContinua>();
 		
 		// Frazioni iniziali
-		meno_1 = new Frazione(new BigInteger("1"), new BigInteger("0"));
-		meno_2 = new Frazione(new BigInteger("0"), new BigInteger("1"));
+		Frazione meno_1 = new Frazione(new BigInteger("1"), new BigInteger("0"));
+		Frazione meno_2 = new Frazione(new BigInteger("0"), new BigInteger("1"));
 		
 		// Prendo numeratore e denominatore della frazione
-		numeratoreIniziale = frazione.get_numeratore();
-		denominatoreIniziale = frazione.get_denominatore();		
+		BigInteger numeratoreIniziale = frazione.get_numeratore();
+		BigInteger denominatoreIniziale = frazione.get_denominatore();		
 		/* 
 		*  Calcolo l'MCD tra numeratore e denominatore in modo da poter utilizzare i quozienti 
 		*  trovati come gli 'ai' per il calcolo delle frazioni continue.
@@ -52,10 +48,10 @@ public class AlgoritmoFrazioneContinuaDefaultStrategy implements IAlgoritmoFrazi
 		
 		/* --------------------------------- Prima Iterazione ------------------------------------------- */
 		// Prendo a0 e rimuovo il primo elemento dalla lista dei risultati dell'algoritmo euclideo.
-		a0 = listaRisultatiAlgoritmoEuclideo.get(0).get_quoziente();
+		BigInteger a0 = listaRisultatiAlgoritmoEuclideo.get(0).get_quoziente();
 		listaRisultatiAlgoritmoEuclideo.remove(0);
 		// Calcolo la prima frazione.
-		risultatoIterazioneCalcoloFrazioneContinua = calcolaNpiu1_esimaFrazione(meno_1, meno_2, a0);
+		RisultatoIterazioneCalcoloFrazioneContinua risultatoIterazioneCalcoloFrazioneContinua = calcolaNpiu1_esimaFrazione(meno_1, meno_2, a0);
 		// Aggiungo il risultato alla lista
 		listaRisultatiFrazioniContinue.add(risultatoIterazioneCalcoloFrazioneContinua);
 		/* 
@@ -66,7 +62,7 @@ public class AlgoritmoFrazioneContinuaDefaultStrategy implements IAlgoritmoFrazi
 		if (listaRisultatiAlgoritmoEuclideo.size()!= 0) {
 			/* --------------------------------- Seconda Iterazione ------------------------------------------- */
 			// Prendo a0 e rimuovo il primo elemento dalla lista dei risultati dell'algoritmo euclideo.
-			a1 = listaRisultatiAlgoritmoEuclideo.get(0).get_quoziente();
+			BigInteger a1 = listaRisultatiAlgoritmoEuclideo.get(0).get_quoziente();
 			listaRisultatiAlgoritmoEuclideo.remove(0);
 			// Calcolo la seconda frazione.
 			risultatoIterazioneCalcoloFrazioneContinua = calcolaNpiu1_esimaFrazione(risultatoIterazioneCalcoloFrazioneContinua.get_frazione(),
@@ -78,7 +74,7 @@ public class AlgoritmoFrazioneContinuaDefaultStrategy implements IAlgoritmoFrazi
 		for (Iterator<RisultatoIterazioneAlgoritmoEuclideo> iterator = listaRisultatiAlgoritmoEuclideo.iterator(); iterator.hasNext();) {
 			RisultatoIterazioneAlgoritmoEuclideo risultatoIterazioneAlgoritmoEuclideo = (RisultatoIterazioneAlgoritmoEuclideo) iterator.next();
 			// Prendo il quoziente del generico risultato dell'algoritmo euclideo
-			a_n_piu_1 = risultatoIterazioneAlgoritmoEuclideo.get_quoziente();
+			BigInteger a_n_piu_1 = risultatoIterazioneAlgoritmoEuclideo.get_quoziente();
 			// Prendo i risultati precedenti
 			RisultatoIterazioneCalcoloFrazioneContinua risultato_n = listaRisultatiFrazioniContinue.get(listaRisultatiFrazioniContinue.size()-1);
 			RisultatoIterazioneCalcoloFrazioneContinua risultato_n_meno_1 = listaRisultatiFrazioniContinue.get(listaRisultatiFrazioniContinue.size()-2);;
@@ -87,9 +83,10 @@ public class AlgoritmoFrazioneContinuaDefaultStrategy implements IAlgoritmoFrazi
 			// Aggiungo l'oggetto risultato alla lista dei risultati
 			listaRisultatiFrazioniContinue.add(risultatoIterazioneCalcoloFrazioneContinua);
 		}	
-		/* Se il rapporto tra numeratore e denominatore è strettamente minore di 1 devo eliminare il primo elemento 
+		/* 
+		 * Se il rapporto tra numeratore e denominatore è strettamente minore di 1 devo eliminare il primo elemento 
 		 * aggiunto alla lista delle frazioni in quanto è una frazione con il numeratore nullo.
-		*/
+		 */
 		if (numeratore_su_denominatore.compareTo(BigInteger.ONE) < 0) {
 			listaRisultatiFrazioniContinue.remove(0);
 		}

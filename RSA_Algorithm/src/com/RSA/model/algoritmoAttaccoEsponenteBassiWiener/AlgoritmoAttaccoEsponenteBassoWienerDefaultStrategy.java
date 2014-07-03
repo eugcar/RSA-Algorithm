@@ -47,7 +47,7 @@ public class AlgoritmoAttaccoEsponenteBassoWienerDefaultStrategy implements IAlg
 			// Prendo i valori del risultato della generica iterazione del calcolo delle frazioni continue.
 			A = risultatoIterazioneCalcoloFrazioneContinua.get_frazione().get_numeratore();   // A = k
 			B = risultatoIterazioneCalcoloFrazioneContinua.get_frazione().get_denominatore(); // B = d
-			// Verifico che (k/d) - (e/n) > 0
+			// Calcolo (k/d) - (e/n) > 0
 			Frazione frazione_k_d = new Frazione(A, B);
 			Frazione frazione_k_d_meno_e_n = frazione_k_d.sottrai(frazione_e_n);
 			// Controllo che B = d, sia dispari e che (k/d) - (e/n) > 0		
@@ -70,6 +70,9 @@ public class AlgoritmoAttaccoEsponenteBassoWienerDefaultStrategy implements IAlg
 						// Controllo se ho fattorizzato n correttamente, ovvero se P*Q = n
 						if (P.multiply(Q).compareTo(n) == 0) {
 							privateKeyClient = new PrivateKey(P, Q, B);
+							
+//							TESTING
+//							
 //							System.out.println("P: " + P);
 //							System.out.println("Q: " + Q);
 //							System.out.println("n=P*Q=" + P.multiply(Q).toString());
