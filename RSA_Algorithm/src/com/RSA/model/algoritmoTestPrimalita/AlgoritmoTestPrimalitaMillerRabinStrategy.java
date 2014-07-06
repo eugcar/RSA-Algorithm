@@ -5,7 +5,7 @@ package com.RSA.model.algoritmoTestPrimalita;
 
 import java.math.BigInteger;
 
-import com.RSA.model.Utility;
+import com.RSA.model.UtilityIntegerNumber;
 
 /**
  * Questa classe rappresenta l'implementazione per verificare la primalità di un numero intero mediante l'applicazione
@@ -43,7 +43,7 @@ public class AlgoritmoTestPrimalitaMillerRabinStrategy implements IAlgoritmoTest
 		// Ciclo times volte.
 		for (int i = 0; i < times; i++) {
 			// Genero un numero casuale nell'intervallo [2, n-2]
-			_a = Utility.generaInteroCasualeInIntervallo(new BigInteger("2"), n.subtract(new BigInteger("2")));
+			_a = UtilityIntegerNumber.generaInteroCasualeInIntervallo(new BigInteger("2"), n.subtract(new BigInteger("2")));
 			// Calcolo y = a^r (mod n)
 			_y = _a.modPow(_r, n);
 			// Controllo che y sia diverso da 1 e da n-1
@@ -77,7 +77,7 @@ public class AlgoritmoTestPrimalitaMillerRabinStrategy implements IAlgoritmoTest
 		// Calcolo n - 1 
 		BigInteger n_meno_1 = n.subtract(BigInteger.ONE);
 		// Ciclo finchè n-1 non diventa dispari
-		while(Utility.isPari(n_meno_1)) {
+		while(UtilityIntegerNumber.isPari(n_meno_1)) {
 			// Effettuo n-1 / 2
 			n_meno_1 = n_meno_1.divide(new BigInteger("2"));
 			// Incremento s di 1.

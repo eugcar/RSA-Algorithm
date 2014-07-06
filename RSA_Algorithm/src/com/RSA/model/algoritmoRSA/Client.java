@@ -49,7 +49,7 @@ public class Client {
 		this._nomeClient = nomeClient;
 		this._macchinaRSA = new MacchinaRSA();
 		this._messaggiRicevuti = new LinkedList<MessaggioCifrato>();
-		// Aggiungo la chiave all'archivio
+		// Aggiungo la chiave all'archivio delle chiavi pubbliche dei client.
 		ArchivioChiaviPubbliche.getInstance().aggiungiClient(this._nomeClient, this._publicKey);
 		
 	}

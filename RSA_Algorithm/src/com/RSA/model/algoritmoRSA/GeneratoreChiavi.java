@@ -9,7 +9,7 @@ import java.security.SecureRandom;
 import java.util.Iterator;
 import java.util.List;
 
-import com.RSA.model.Utility;
+import com.RSA.model.UtilityIntegerNumber;
 import com.RSA.model.algoritmoTestPrimalita.AlgoritmoTestPrimalitaMillerRabinStrategy;
 import com.RSA.model.algoritmoTestPrimalita.IAlgoritmoTestPrimalitaStrategy;
 
@@ -22,33 +22,43 @@ import com.RSA.model.algoritmoTestPrimalita.IAlgoritmoTestPrimalitaStrategy;
  */
 public class GeneratoreChiavi {
 	/**
-	 * Probabilità che i numeri primi generati siano effettivamente primi, con probabilità pari ad (1/4)^_accuracy.
+	 * Probabilità che i numeri primi generati siano effettivamente primi, 
+	 * con probabilità pari ad (1/4)^_accuracy.
 	 */
 	private static int _accuracy = 100;
 	/**
-	 * Numero di bit della chiave.
+	 * Numero di bit per rappresentare il numero primo P.
 	 */
-	private static int _numeroBitChiave = 512;
+	private static int _numeroBitChiaveP = 512;
 	/**
-	 * Limite superiore alla ricerca dei numeri primi che non sono divisori di un certo numero intero.
+	 * Numero di bit per rappresentare il numero primo q. Si utilizzano meno bit
+	 * rispetto a quelli utilizzati per rappresentare il numero primo p, per evitare
+	 * di essere soggetti alla fattorizzazione di Fermat.
+	 */
+	private static int _numeroBitChiaveQ = _numeroBitChiaveP - 10;
+	/**
+	 * Limite superiore alla ricerca dei numeri primi, utilizzati per testare
+	 * che un generico numero intero, non sia un multiplo di essi. Si utilizza a monte
+	 * del test di Miller-Rabin per effettuare una scrematura sui numeri interi proposti.
 	 */
 	private static BigInteger _upperBoundRicercaPrimi = new BigInteger("256");
 	/**
-	 * Metodo per generare la chiave pubblica e privata di un client (Alice, Bob).
+	 * Metodo per generare la chiave pubblica e privata di un client come Alice o Bob.
 	 */
 	public static void generaChiavi(Client client, Boolean sicuro) {
 		// Elementi della chiave
 		BigInteger p=null, q=null, d=null, e=null, n=null, q_meno_1=null; 
 		// Oggetto responsabile della creazione del numero randomico
 		SecureRandom secureRandom = new SecureRandom();
-		// Il punto di partenza è un numero intero compreso tra 0 e 2^(_numBit-1).
-		BigInteger numberStart_p = new BigInteger(_numeroBitChiave, secureRandom);
+		// Il punto di partenza è un numero intero compreso tra 0 e 2^(_numBitP-1).
+		BigInteger numberStart_p = new BigInteger(_numeroBitChiaveP, secureRandom);
 		// Calcolo p e p-1
 		p = getFirstPrimeNumberAfterNumber(numberStart_p, _accuracy);
 		BigInteger p_meno_1 = p.subtract(BigInteger.ONE);
+		// Controllo che si vogliano usare esponenti di cifratura sicuri
 		if (sicuro == true) {
-			// Il punto di partenza è un numero intero compreso tra 0 e 2^(_numBit-1).
-			BigInteger numberStart_q = new BigInteger(_numeroBitChiave, secureRandom);
+			// Il punto di partenza è un numero intero compreso tra 0 e 2^(_numBitQ-1).
+			BigInteger numberStart_q = new BigInteger(_numeroBitChiaveQ, secureRandom);
 			// Calcolo q e q-1
 			q = getFirstPrimeNumberAfterNumber(numberStart_q, _accuracy);
 			q_meno_1 = q.subtract(BigInteger.ONE);
@@ -124,10 +134,10 @@ public class GeneratoreChiavi {
 //		System.out.println("Numero di partenza: " + number);
 		
 		// Carico la lista dei numeri primi precedenti a number.
-		List<BigInteger> listaNumeriPrimiPrecedentiNumber = Utility.getListaPrimiPrecedentiNumber(_upperBoundRicercaPrimi, _accuracy);
+		List<BigInteger> listaNumeriPrimiPrecedentiNumber = UtilityIntegerNumber.getListaPrimiPrecedentiNumber(_upperBoundRicercaPrimi, _accuracy);
 		// Ciclo finchè non trovo il numero primo.
 		while(!trovato) {
-			// Effettuo il test
+			// Effettuo il test e salvo l'esito in trovato
 			trovato = algoritmoTestPrimalitaStrategy.testaPrimalitaIntero(number, accuracy);					
 			// Se l'esito del test è positivo assegno il valore di number a primeNumber.
 			if (trovato == true) {		
@@ -145,12 +155,13 @@ public class GeneratoreChiavi {
 	}
 	/**
 	 * Metodo per ottenere un numero intero successivo a quello dato, non divisibile dalla lista
-	 * dei numeri primi precedenti all'attributo _upperBoundRicercaPrimi.
+	 * dei numeri primi precedenti all'attributo _upperBoundRicercaPrimi, quindi si ottiene un buon
+	 * candidato ad essere un numero primo.
 	 * 
 	 * @param number Numero dal quale si parte per effettuare il test.
 	 * @param listaPrimi Lista dei primi sulla quale effettuare il test.
 	 * 
-	 * @return Numero intero non divisibile dalla lista dei numeri primi precedenti di _upperBoundRicercaPrimi
+	 * @return Numero intero non divisibile dalla lista dei numeri primi precedenti di _upperBoundRicercaPrimi.
 	 */
 	private static BigInteger nextIntegerNotDivisibleBySeveralPrime(BigInteger number, List<BigInteger> listaPrimi) {
 		// BigInteger da restituire
@@ -168,10 +179,10 @@ public class GeneratoreChiavi {
 			boolean multiplo = false;
 			// Ciclo per verificare che il numero nell'iterazione corrente non sia multiplo di un numero primo.
 			for (Iterator<BigInteger> iterator = listaPrimi.iterator(); iterator.hasNext();) {
-				// Generico elemento della lista
+				// Generico elemento della lista dei numeri primi
 				BigInteger primeNumber = (BigInteger) iterator.next();			
 				// Verifico che number non sia multiplo di primeNumber
-				if (Utility.A_multiplo_B(number, primeNumber) == true) {
+				if (UtilityIntegerNumber.A_multiplo_B(number, primeNumber) == true) {
 					multiplo = true;
 				}
 			}

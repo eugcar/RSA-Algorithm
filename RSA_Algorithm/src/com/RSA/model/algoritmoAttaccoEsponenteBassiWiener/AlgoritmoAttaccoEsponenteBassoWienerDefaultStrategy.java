@@ -9,7 +9,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import com.RSA.model.Frazione;
-import com.RSA.model.Utility;
+import com.RSA.model.UtilityIntegerNumber;
 import com.RSA.model.algoritmoFrazioneContinua.AlgoritmoFrazioneContinuaDefaultStrategy;
 import com.RSA.model.algoritmoFrazioneContinua.IAlgoritmoFrazioneContinuaStrategy;
 import com.RSA.model.algoritmoFrazioneContinua.RisultatoIterazioneCalcoloFrazioneContinua;
@@ -51,11 +51,11 @@ public class AlgoritmoAttaccoEsponenteBassoWienerDefaultStrategy implements IAlg
 			Frazione frazione_k_d = new Frazione(A, B);
 			Frazione frazione_k_d_meno_e_n = frazione_k_d.sottrai(frazione_e_n);
 			// Controllo che B = d, sia dispari e che (k/d) - (e/n) > 0		
-			if(!Utility.isPari(B) && frazione_k_d_meno_e_n.isPositiva()) {				
+			if(!UtilityIntegerNumber.isPari(B) && frazione_k_d_meno_e_n.isPositiva()) {				
 				// Calcolo C
 				e_B_meno_1 = e.multiply(B).subtract(BigInteger.ONE);
 				// Controllo che C sia un intero. Ovvero che e*B - 1 / A abbia resto nullo.
-				if (Utility.A_divide_B(e_B_meno_1, A)) {
+				if (UtilityIntegerNumber.A_divide_B(e_B_meno_1, A)) {
 					C = e_B_meno_1.divide(A);
 					// Calcolo radici del polinomio:  x^2 - x*(n - fi_n + 1) + n
 					Zero_order = n;
@@ -106,7 +106,7 @@ public class AlgoritmoAttaccoEsponenteBassoWienerDefaultStrategy implements IAlg
 			double r1 = (b + discriminante) / 2;
 			double r2 = (b - discriminante) / 2;
 			// Controllo che le variabili siano intere
-			if (Utility.isIntero(r1) && Utility.isIntero(r2)) {
+			if (UtilityIntegerNumber.isIntero(r1) && UtilityIntegerNumber.isIntero(r2)) {
 				// Inizializzo l'array
 				radiciPolinomio = new BigInteger[2];
 				// Aggiungo le radici all'array

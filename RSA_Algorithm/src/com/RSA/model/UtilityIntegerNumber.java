@@ -16,7 +16,7 @@ import com.RSA.model.algoritmoTestPrimalita.IAlgoritmoTestPrimalitaStrategy;
  * 
  * @author Eugenio
  */
-public class Utility {
+public class UtilityIntegerNumber {
 	/**
 	 * Metodo per verificare che un intero A, divide un intero B.
 	 * 
@@ -101,7 +101,7 @@ public class Utility {
 		for (int i = 3; i < number.intValue(); i++) {
 			integerToTest = new BigInteger(String.valueOf(i));
 			// Verifico che il numero sia dispari
-			if (!Utility.isPari(integerToTest)) {
+			if (!UtilityIntegerNumber.isPari(integerToTest)) {
 				// Applico il test
 				esito = algoritmoTestPrimalitaStrategy.testaPrimalitaIntero(integerToTest, accuracy);
 				// integerToTest è un numero primo, allora lo aggiungo alla lista.
